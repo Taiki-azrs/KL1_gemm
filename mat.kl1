@@ -1,0 +1,30 @@
+:- module main.
+main :- generic:new(vector,A,List),generic:new(vector,B,List),naturals(~(32*32),List),loop_mat(A,B,0,0,Calc),print_calc(Calc).
+
+print_calc([CAR|CDR]):- io:outstream([print(CAR),nl]).
+
+loop_mat(A,B,I,J,CalcList):-
+    I>=32 | CalcList=[].
+loop_mat(A,B,I,J,CalcList):-
+  J<32 | CalcList=[CAR|CDR],fma_vec(A,B,CAR,I,J),loop_mat(A,B,I,~(J+1),CDR).
+
+loop_mat(A,B,I,J,CalcList):-
+    J>=32 | CalcList=[CAR|CDR],II:=I+1,JJ:=0,loop_mat(A,B,II,JJ,CDR).
+
+
+
+fma_vec(A,B,Calc,I,J):-
+    mul(A,B,LIST,0,I,J),sum(LIST,Calc).
+
+mul(A,B,LIST,K,I,J) :- K>=32 | LIST=[].
+mul(A,B,LIST,K,I,J) :- K<32 | AIDX:=I*32+K,BIDX:=K*32+J,vector_element(A,AIDX,AE,A1),vector_element(B,BIDX,BE,B1),LIST=[~(AE*BE)|CDR],mul(A,B,CDR,~(K+1),I,J).
+
+
+
+sum([],PSum,Sum) :- Sum=PSum.
+sum([One|Rest],PSum,Sum) :- NewPSum:=PSum+One, sum(Rest,NewPSum,Sum).
+sum(List,Sum) :- sum(List,0,Sum).
+
+naturals(N,M,List) :- N>=M | List=[].
+naturals(N,M,List) :- N<M  | List=[N|Rest],naturals(~(N+1),M,Rest).
+naturals(M,List) :- naturals(0,M,List).
