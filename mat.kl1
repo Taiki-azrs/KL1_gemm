@@ -1,15 +1,18 @@
 :- module main.
-main :- generic:new(vector,A,List),generic:new(vector,B,List),naturals(~(32*32),List),loop_mat(A,B,0,0,Calc),print_calc(Calc).
+main :- generic:new(vector,A,List),generic:new(vector,B,List),naturals(~(32*32),List),loop_mat(A,B,0,0,Calc),print_calc(Calc,0).
 
-print_calc([CAR|CDR]):- io:outstream([print(CAR),nl]).
+print_calc([CAR|CDR],N):- N<1023 | io:outstream([print(CAR),print(","),print(N),nl]),print_calc(CDR,~(N+1)).
+otherwise.
+print_calc([CAR|CDR],N):- io:outstream([print(CAR),print(","),print(N),nl]).
 
 loop_mat(A,B,I,J,CalcList):-
     I>=32 | CalcList=[].
+otherwise.
 loop_mat(A,B,I,J,CalcList):-
   J<32 | CalcList=[CAR|CDR],fma_vec(A,B,CAR,I,J),loop_mat(A,B,I,~(J+1),CDR).
 
 loop_mat(A,B,I,J,CalcList):-
-    J>=32 | CalcList=[CAR|CDR],II:=I+1,JJ:=0,loop_mat(A,B,II,JJ,CDR).
+    J>=32 | II:=I+1,loop_mat(A,B,II,0,CalcList).
 
 
 
