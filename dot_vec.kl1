@@ -1,0 +1,16 @@
+:- module main.
+main :- generic:new(vector,A,List),generic:new(vector,B,List),naturals(4096,List),fma_vec(A,B,Calc),io:outstream([print(Calc),nl]).
+
+fma_vec(A,B,Calc):-
+    mul(A,B,LIST,0),sum(LIST,Calc).
+mul(A,B,LIST,K) :- K>=4096 | LIST=[].
+mul(A,B,LIST,K) :- K<4096  | vector_element(B,K,B1),vector_element(A,K,A1)
+                   ,K1:=K+1,LIST=[~(A1*B1)|CDR],mul(A,B,CDR,K1).
+
+sum([],PSum,Sum) :- Sum=PSum.
+sum([One|Rest],PSum,Sum) :- NewPSum:=PSum+One, sum(Rest,NewPSum,Sum).
+sum(List,Sum) :- sum(List,0,Sum).
+
+naturals(N,M,List) :- N>=M | List=[].
+naturals(N,M,List) :- N<M  | List=[N|Rest], N1:=N+1,naturals(N1,M,Rest).
+naturals(M,List) :- naturals(0,M,List).

@@ -1,9 +1,8 @@
 :- module main.
 main :- generic:new(vector,A,List),generic:new(vector,B,List),naturals(~(32*32),List),loop_mat(A,B,0,0,Calc),print_calc(Calc,0).
 
-print_calc([CAR|CDR],N):- N<1023 | io:outstream([print(CAR),print(","),print(N),nl]),print_calc(CDR,~(N+1)).
-otherwise.
-print_calc([CAR|CDR],N):- io:outstream([print(CAR),print(","),print(N),nl]).
+print_calc([CAR|CDR],N):- io:outstream([print(CAR),print(','),print(N),nl]),print_calc(CDR,~(N+1)).
+print_calc([],N):- io:outstream([print('end'),nl]).
 
 loop_mat(A,B,I,J,CalcList):-
     I>=32 | CalcList=[].
@@ -20,7 +19,7 @@ fma_vec(A,B,Calc,I,J):-
     mul(A,B,LIST,0,I,J),sum(LIST,Calc).
 
 mul(A,B,LIST,K,I,J) :- K>=32 | LIST=[].
-mul(A,B,LIST,K,I,J) :- K<32 | AIDX:=I*32+K,BIDX:=K*32+J,vector_element(A,AIDX,AE,A1),vector_element(B,BIDX,BE,B1),LIST=[~(AE*BE)|CDR],mul(A,B,CDR,~(K+1),I,J).
+mul(A,B,LIST,K,I,J) :- K<32 | AIDX:=I*32+K,BIDX:=K*32+J,vector_element(A,AIDX,AE),vector_element(B,BIDX,BE),LIST=[~(AE*BE)|CDR],mul(A,B,CDR,~(K+1),I,J).
 
 
 

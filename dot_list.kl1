@@ -1,11 +1,10 @@
 :- module main.
-main :- createvec(V,1024),naturals(1024,List),fma_vec(List,V,Calc),io:outstream([print(Calc),nl]).
+main :- naturals(4096,V),naturals(4096,List),fma_vec(List,V,Calc),io:outstream([print(Calc),nl]).
 
 fma_vec(A,B,Calc):-
     mul(A,B,LIST,0),sum(LIST,Calc).
-mul([],B,LIST,K) :- LIST=[].
-mul([F|A1],B,LIST,K) :- K<1024  | vector_element(B,K,F1,B1)
-                   ,K1:=K+1,LIST=[~(F*F1)|CDR],mul(A1,B,CDR,K1).
+mul([],[],LIST,K) :- LIST=[].
+mul([F|A1],[F1|B1],LIST,K) :- K<4096  | K1:=K+1,LIST=[~(F*F1)|CDR],mul(A1,B1,CDR,K1).
 
 sum([],PSum,Sum) :- Sum=PSum.
 sum([One|Rest],PSum,Sum) :- NewPSum:=PSum+One, sum(Rest,NewPSum,Sum).
